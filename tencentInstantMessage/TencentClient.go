@@ -1,6 +1,7 @@
 package tencentInstantMessage
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/franela/goreq"
 	"io/ioutil"
@@ -60,7 +61,7 @@ func (timClient *TencentMessageClient) request(uri string, method string, body i
 func (timClient *TencentMessageClient) buildUrl(subUrl string) string {
 	appId, _ := strconv.Atoi(timClient.SdkAppId)
 	userSig, _ := GenSig(appId, timClient.SecretKey, timClient.Identifier, 1000)
-	url := TENCENT_IM_SERVER_URL + fmt.Sprintf(subUrl, timClient.SdkAppId, timClient.Identifier, userSig, rand.Uint32())
+	url := TENCENT_IM_SERVER_URL + subUrl + fmt.Sprintf(TENCENT_REQUEST_PARAM, timClient.SdkAppId, timClient.Identifier, userSig, rand.Uint32())
 	return url
 }
 
@@ -140,4 +141,51 @@ func (timClient *TencentMessageClient) ImportAccount(identifier, nick, faceUrl s
 	}
 
 	return nil
+}
+
+// check not import account
+func (timClient *TencentMessageClient) CheckAccount(userIds []string) ([]string, error) {
+	if len(userIds) > 100 {
+		fmt.Println("param userIds length greater than 100")
+	}
+	var items []TencentCheckAccountItem
+	for _, value := range userIds {
+		userItem := TencentCheckAccountItem{
+			UserID: value,
+		}
+		items = append(items, userItem)
+	}
+	req := TencentCheckAccount{CheckItem: items}
+
+	url := timClient.buildUrl(CHECK_ACCOUNT)
+	resp, err := timClient.request(url, "POST", req)
+
+	if nil != err {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	ibytes, err := ioutil.ReadAll(resp.Body)
+
+	if nil != err {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+
+	if ShowDebug {
+		fmt.Println("respone:", string(ibytes))
+	}
+
+	var response TencentCheckAccountResponse
+	json.Unmarshal(ibytes, &response)
+
+	var notImportAccount []string
+	for _, value := range response.ResultItem {
+		if value.AccountStatus == "NotImported" {
+			notImportAccount = append(notImportAccount, value.UserID)
+		}
+	}
+
+	return notImportAccount, nil
 }

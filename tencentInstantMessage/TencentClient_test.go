@@ -14,10 +14,15 @@ func TestSendTxtMsg(t *testing.T) {
 	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
 	var msg []string
 	msg = append(msg, "Tom & Jack")
-	timClient.SendTxtMsg("黄国超", "黄国超", msg)
+	timClient.SendTxtMsg("mary", "tom", msg)
 }
 
 func TestImportAccount(t *testing.T) {
 	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
-	timClient.ImportAccount("黄国超", "黄国超", "https://wx.qlogo.cn/mmopen/vi_32/AbK5wc86LMiba8Z79FqiaJiabWgTF3HNjprCbTNSicsbWmLZt4rZiboWbwn0IZh7fbWWKFsT8ufFRH7jrvKdjOTdcNw/132")
+	timClient.ImportAccount("tom", "tom", "https://wx.qlogo.cn/mmopen/vi_32/AbK5wc86LMiba8Z79FqiaJiabWgTF3HNjprCbTNSicsbWmLZt4rZiboWbwn0IZh7fbWWKFsT8ufFRH7jrvKdjOTdcNw/132")
+}
+
+func TestCheckAccount(t *testing.T) {
+	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
+	timClient.CheckAccount([]string{"tom"})
 }

@@ -26,3 +26,29 @@ type TencentAccount struct {
 	Nick       string // 用户昵称
 	FaceUrl    string // 用户头像 URL
 }
+
+type TencentResponse struct {
+	ActionStatus string // 请求的处理结果，OK 表示处理成功，FAIL 表示失败
+	ErrorCode    int    // 错误码，0表示成功，非0表示失败
+	ErrorInfo    string // 请求处理失败时的错误信息
+}
+
+type TencentCheckAccount struct {
+	CheckItem []TencentCheckAccountItem
+}
+
+type TencentCheckAccountItem struct {
+	UserID string // 请求检查的帐号的 UserID
+}
+
+type TencentCheckAccountResponse struct {
+	TencentResponse
+	ResultItem []TencentCheckAccountResponseItem // 单个帐号的结果对象数组
+}
+
+type TencentCheckAccountResponseItem struct {
+	UserID        string // 请求检查的帐号的 UserID
+	ResultCode    int    // 单个帐号的检查结果：0表示成功，非0表示失败
+	ResultInfo    string // 单个帐号检查失败时的错误描述信息
+	AccountStatus string // 单个帐号的导入状态：Imported 表示已导入，NotImported 表示未导入
+}
