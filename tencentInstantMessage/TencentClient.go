@@ -43,6 +43,12 @@ func (timClient *TencentMessageClient) buildReq(uri string, method string, body 
 	return &req, nil
 }
 
+func (timClient *TencentMessageClient) GetUserSig() string {
+	appId, _ := strconv.Atoi(timClient.SdkAppId)
+	userSig, _ := GenSig(appId, timClient.SecretKey, timClient.Identifier, 1000)
+	return userSig
+}
+
 func (timClient *TencentMessageClient) request(uri string, method string, body interface{}) (*goreq.Response, error) {
 	req, err := timClient.buildReq(uri, method, body)
 	if nil != err {
@@ -59,8 +65,7 @@ func (timClient *TencentMessageClient) request(uri string, method string, body i
 }
 
 func (timClient *TencentMessageClient) buildUrl(subUrl string) string {
-	appId, _ := strconv.Atoi(timClient.SdkAppId)
-	userSig, _ := GenSig(appId, timClient.SecretKey, timClient.Identifier, 1000)
+	userSig := timClient.GetUserSig()
 	url := TENCENT_IM_SERVER_URL + subUrl + fmt.Sprintf(TENCENT_REQUEST_PARAM, timClient.SdkAppId, timClient.Identifier, userSig, rand.Uint32())
 	return url
 }
