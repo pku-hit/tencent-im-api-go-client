@@ -2,6 +2,8 @@ package tencentInstantMessage
 
 var ShowDebug = true
 
+var TENCENT_SUCCESS = "OK"
+
 type TencentMessage struct {
 	SyncOtherMachine int           // 1：把消息同步到 From_Account 在线终端和漫游上（默认）；2：消息不同步至 From_Account；（选填）
 	FromAccount      string        `json:"From_Account"` // 消息发送方 Identifier（用于指定发送消息方帐号）（选填）

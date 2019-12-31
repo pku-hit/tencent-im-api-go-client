@@ -116,7 +116,7 @@ func (timClient *TencentMessageClient) SendTxtMsg(fromAccount string, toAccount 
 }
 
 // import account
-func (timClient *TencentMessageClient) ImportAccount(identifier, nick, faceUrl string) error {
+func (timClient *TencentMessageClient) ImportAccount(identifier, nick, faceUrl string) (bool, error) {
 	if len([]byte(identifier)) > 32 {
 		fmt.Println("param identifier byte length greater than 32")
 	}
@@ -131,21 +131,27 @@ func (timClient *TencentMessageClient) ImportAccount(identifier, nick, faceUrl s
 	resp, err := timClient.request(url, "POST", account)
 	if nil != err {
 		fmt.Println(err.Error())
-		return err
+		return false, err
 	}
 	defer resp.Body.Close()
 
 	ibytes, err := ioutil.ReadAll(resp.Body)
 	if nil != err {
 		fmt.Println(err.Error())
-		return err
+		return false, err
 	}
 
 	if ShowDebug {
 		fmt.Println("respone:", string(ibytes))
 	}
 
-	return nil
+	var response TencentResponse
+	json.Unmarshal(ibytes, &response)
+	if response.ActionStatus == TENCENT_SUCCESS {
+		return true, nil
+	}
+
+	return false, nil
 }
 
 // check not import account
