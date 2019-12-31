@@ -1,4 +1,4 @@
-module tencent-im-api-go-client
+module github.com/pku-hit/tencent-im-api-go-client
 
 go 1.13
 
