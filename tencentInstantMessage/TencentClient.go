@@ -73,7 +73,7 @@ func (timClient *TencentMessageClient) buildUrl(subUrl string) string {
 /**
  * sendMessage
  */
-func (timClient *TencentMessageClient) SendTxtMsg(fromAccount string, toAccount string, messages []string) error {
+func (timClient *TencentMessageClient) SendTxtMsg(fromAccount string, toAccount string, messages []string) (bool, error) {
 	url := timClient.buildUrl(SEND_MESSAGE_URL)
 
 	var msgBodys []interface{}
@@ -99,20 +99,26 @@ func (timClient *TencentMessageClient) SendTxtMsg(fromAccount string, toAccount 
 
 	resp, err := timClient.request(url, "POST", timMsg)
 	if nil != err {
-		return err
+		return false, err
 	}
 	defer resp.Body.Close()
 
 	ibytes, err := ioutil.ReadAll(resp.Body)
 	if nil != err {
-		return err
+		return false, err
 	}
 
 	if ShowDebug {
 		fmt.Println("respone:", string(ibytes))
 	}
 
-	return nil
+	var response TencentResponse
+	json.Unmarshal(ibytes, &response)
+	if response.ActionStatus == TENCENT_SUCCESS {
+		return true, nil
+	}
+
+	return false, nil
 }
 
 // import account
