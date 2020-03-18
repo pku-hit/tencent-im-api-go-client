@@ -49,6 +49,12 @@ func (timClient *TencentMessageClient) GetUserSig() string {
 	return userSig
 }
 
+func (timClient *TencentMessageClient) GetUserSigWithUser(userId string) string {
+	appId, _ := strconv.Atoi(timClient.SdkAppId)
+	userSig, _ := GenSig(appId, timClient.SecretKey, userId, 1000)
+	return userSig
+}
+
 func (timClient *TencentMessageClient) request(uri string, method string, body interface{}) (*goreq.Response, error) {
 	req, err := timClient.buildReq(uri, method, body)
 	if nil != err {

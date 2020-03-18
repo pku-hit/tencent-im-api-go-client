@@ -1,6 +1,7 @@
 package tencentInstantMessage
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -25,4 +26,11 @@ func TestImportAccount(t *testing.T) {
 func TestCheckAccount(t *testing.T) {
 	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
 	timClient.CheckAccount([]string{"tom"})
+}
+
+func TestGetUserSigWithUser(t *testing.T) {
+	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
+	userId := "test"
+	userSig := timClient.GetUserSigWithUser(userId)
+	fmt.Println(userSig)
 }
