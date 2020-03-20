@@ -14,13 +14,15 @@ type TencentMessageClient struct {
 	SdkAppId   string
 	SecretKey  string
 	Identifier string
+	Expire     int
 }
 
-func NewTencentInstantMessageClient(sdkAppId string, secretKey string, identifier string) *TencentMessageClient {
+func NewTencentInstantMessageClient(sdkAppId string, secretKey string, identifier string, expire int) *TencentMessageClient {
 	return &TencentMessageClient{
 		SdkAppId:   sdkAppId,
 		SecretKey:  secretKey,
 		Identifier: identifier,
+		Expire:     expire,
 	}
 }
 
@@ -51,7 +53,7 @@ func (timClient *TencentMessageClient) GetUserSig() string {
 
 func (timClient *TencentMessageClient) GetUserSigWithUser(userId string) string {
 	appId, _ := strconv.Atoi(timClient.SdkAppId)
-	userSig, _ := GenSig(appId, timClient.SecretKey, userId, 1000)
+	userSig, _ := GenSig(appId, timClient.SecretKey, userId, timClient.Expire)
 	return userSig
 }
 
