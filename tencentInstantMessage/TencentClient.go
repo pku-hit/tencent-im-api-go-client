@@ -47,13 +47,13 @@ func (timClient *TencentMessageClient) buildReq(uri string, method string, body 
 
 func (timClient *TencentMessageClient) GetUserSig() string {
 	appId, _ := strconv.Atoi(timClient.SdkAppId)
-	userSig, _ := GenSig(appId, timClient.SecretKey, timClient.Identifier, timClient.Expire)
+	userSig, _ := GenSig(appId, timClient.SecretKey, timClient.Identifier, 180*86400)
 	return userSig
 }
 
 func (timClient *TencentMessageClient) GetUserSigWithUser(userId string) string {
 	appId, _ := strconv.Atoi(timClient.SdkAppId)
-	userSig, _ := GenSig(appId, timClient.SecretKey, userId, timClient.Expire)
+	userSig, _ := GenSig(appId, timClient.SecretKey, userId, 180*86400)
 	return userSig
 }
 

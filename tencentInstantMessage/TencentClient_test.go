@@ -12,25 +12,25 @@ const (
 )
 
 func TestSendTxtMsg(t *testing.T) {
-	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
+	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier, 180*86400)
 	var msg []string
 	msg = append(msg, "Tom & Jack")
 	timClient.SendTxtMsg("mary", "tom", msg)
 }
 
 func TestImportAccount(t *testing.T) {
-	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
+	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier, 180*86400)
 	timClient.ImportAccount("tom", "tom", "https://wx.qlogo.cn/mmopen/vi_32/AbK5wc86LMiba8Z79FqiaJiabWgTF3HNjprCbTNSicsbWmLZt4rZiboWbwn0IZh7fbWWKFsT8ufFRH7jrvKdjOTdcNw/132")
 }
 
 func TestCheckAccount(t *testing.T) {
-	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
+	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier, 180*86400)
 	timClient.CheckAccount([]string{"tom"})
 }
 
 func TestGetUserSigWithUser(t *testing.T) {
-	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier)
-	userId := "test"
+	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier, 180*86400)
+	userId := "1217029546898300928"
 	userSig := timClient.GetUserSigWithUser(userId)
 	fmt.Println(userSig)
 }
