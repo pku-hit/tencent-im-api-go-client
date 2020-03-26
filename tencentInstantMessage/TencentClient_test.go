@@ -37,7 +37,7 @@ func TestGetUserSigWithUser(t *testing.T) {
 
 func TestQueryState(t *testing.T) {
 	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier, 180*86400)
-	accountIds := []string{"1217640198279544832"}
+	accountIds := []string{"1218067429370359808", "1218069177208139776"}
 	response, _ := timClient.QueryState(1, accountIds)
 	fmt.Println(response)
 }

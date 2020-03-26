@@ -215,7 +215,7 @@ func (timClient *TencentMessageClient) CheckAccount(userIds []string) ([]string,
 	return notImportAccount, nil
 }
 
-func (timClient *TencentMessageClient) QueryState(isNeedDetail int, toAccount []string) (TencentQueryStateResponse, error) {
+func (timClient *TencentMessageClient) QueryState(isNeedDetail int, toAccount []string) (string, error) {
 	if len(toAccount) == 0 {
 		fmt.Println("toAccount param is null")
 	}
@@ -234,7 +234,7 @@ func (timClient *TencentMessageClient) QueryState(isNeedDetail int, toAccount []
 
 	if nil != err {
 		fmt.Println(err.Error())
-		return TencentQueryStateResponse{}, err
+		return "", err
 	}
 	defer resp.Body.Close()
 
@@ -242,15 +242,12 @@ func (timClient *TencentMessageClient) QueryState(isNeedDetail int, toAccount []
 
 	if nil != err {
 		fmt.Println(err.Error())
-		return TencentQueryStateResponse{}, err
+		return "", err
 	}
 
 	if ShowDebug {
 		fmt.Println("respone:", string(ibytes))
 	}
 
-	var response TencentQueryStateResponse
-	json.Unmarshal(ibytes, &response)
-
-	return response, nil
+	return string(ibytes), nil
 }
