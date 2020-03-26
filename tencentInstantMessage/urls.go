@@ -6,4 +6,5 @@ const (
 	ACCOUNT_IMPORT_URL    = "v4/im_open_login_svc/account_import"
 	SEND_MESSAGE_URL      = "v4/openim/sendmsg"
 	CHECK_ACCOUNT         = "v4/im_open_login_svc/account_check"
+	QUERY_STATE           = "v4/openim/querystate"
 )

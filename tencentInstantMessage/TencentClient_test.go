@@ -34,3 +34,10 @@ func TestGetUserSigWithUser(t *testing.T) {
 	userSig := timClient.GetUserSigWithUser(userId)
 	fmt.Println(userSig)
 }
+
+func TestQueryState(t *testing.T) {
+	timClient := NewTencentInstantMessageClient(sdkAppid, secretKey, identifier, 180*86400)
+	accountIds := []string{"1217640198279544832"}
+	response, _ := timClient.QueryState(1, accountIds)
+	fmt.Println(response)
+}

@@ -214,3 +214,43 @@ func (timClient *TencentMessageClient) CheckAccount(userIds []string) ([]string,
 
 	return notImportAccount, nil
 }
+
+func (timClient *TencentMessageClient) QueryState(isNeedDetail int, toAccount []string) (TencentQueryStateResponse, error) {
+	if len(toAccount) == 0 {
+		fmt.Println("toAccount param is null")
+	}
+
+	if len(toAccount) > 500 {
+		fmt.Println("toAccount param length greater than 500")
+	}
+
+	req := TencentQueryState{
+		IsNeedDetail: 1,
+		To_Account:   toAccount,
+	}
+
+	url := timClient.buildUrl(QUERY_STATE)
+	resp, err := timClient.request(url, "POST", req)
+
+	if nil != err {
+		fmt.Println(err.Error())
+		return TencentQueryStateResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	ibytes, err := ioutil.ReadAll(resp.Body)
+
+	if nil != err {
+		fmt.Println(err.Error())
+		return TencentQueryStateResponse{}, err
+	}
+
+	if ShowDebug {
+		fmt.Println("respone:", string(ibytes))
+	}
+
+	var response TencentQueryStateResponse
+	json.Unmarshal(ibytes, &response)
+
+	return response, nil
+}
